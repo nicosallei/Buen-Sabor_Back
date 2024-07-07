@@ -8,7 +8,7 @@ import java.util.List;
 public interface ISucursalService {
     public Sucursal save(Sucursal sucursal) throws Exception;
     public boolean delete(Long id) throws Exception;
-    public Sucursal update(Long id, Sucursal sucursal) throws Exception;
+    public Sucursal updateDto(Long id, SucursalDto sucursalDto) throws Exception;
     public List<Sucursal> traerTodo() throws Exception;
     public Sucursal traerPorId(Long id) throws Exception;
     public Sucursal reactivate(Long id) throws Exception;

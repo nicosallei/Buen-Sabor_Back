@@ -21,6 +21,6 @@ public class SucursalDto extends BaseDto {
     private String provincia;
     private String Pais;
     private String idEmpresa;
-//    private String imagen;
+       private String imagen;
 
 }
