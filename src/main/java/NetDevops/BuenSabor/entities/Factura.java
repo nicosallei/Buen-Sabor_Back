@@ -8,6 +8,7 @@ import java.time.LocalDate;
 
 @Entity
 @Data
+//@Audited
 public class Factura extends Base{
 
     private LocalDate fechaFacturacion;

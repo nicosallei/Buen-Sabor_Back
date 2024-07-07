@@ -9,6 +9,7 @@ import java.util.List;
 
 @Entity
 @Data
+//@Audited
 public class Cliente extends Base{
 
     private String nombre;

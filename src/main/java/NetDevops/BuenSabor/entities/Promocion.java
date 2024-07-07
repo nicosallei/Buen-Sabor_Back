@@ -19,6 +19,7 @@ import java.util.Set;
 @Getter
 @ToString
 @Builder
+//@Audited
 public class Promocion extends Base{
 
     private String denominacion;

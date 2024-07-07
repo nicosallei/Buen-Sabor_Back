@@ -14,6 +14,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+//@Audited
 public class ArticuloManufacturadoDetalle extends Base{
 
     private Integer cantidad;

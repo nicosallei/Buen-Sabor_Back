@@ -10,6 +10,7 @@ import java.util.List;
 
 @Entity
 @Data
+//@Audited
 public class Domicilio extends Base{
     private String calle;
     private Integer numero;

@@ -18,6 +18,7 @@ import java.util.Set;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+//@Audited
 public class ArticuloManufacturado extends Articulo{
 
     private Integer tiempoEstimadoMinutos;

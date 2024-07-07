@@ -9,6 +9,7 @@ import lombok.*;
 @Setter
 @Getter
 @ToString
+//@Audited
 public class UnidadMedida extends Base{
     private String denominacion;
 }

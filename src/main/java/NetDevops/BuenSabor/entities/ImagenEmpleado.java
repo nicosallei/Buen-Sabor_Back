@@ -5,6 +5,7 @@ import lombok.Data;
 
 @Entity
 @Data
+//@Audited
 public class ImagenEmpleado extends Base{
     private String url;
 

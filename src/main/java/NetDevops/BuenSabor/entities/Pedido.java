@@ -13,6 +13,7 @@ import java.util.List;
 
 @Entity
 @Data
+//@Audited
 public class Pedido extends Base{
     private LocalTime hora;
     private Double total;

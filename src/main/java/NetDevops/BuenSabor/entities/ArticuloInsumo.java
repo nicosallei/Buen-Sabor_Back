@@ -10,6 +10,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
+//@Audited
 public class ArticuloInsumo extends Articulo{
 
 
