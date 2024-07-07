@@ -44,6 +44,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.security:spring-security-core'
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
+	implementation group: 'org.hibernate.orm', name: 'hibernate-envers', version: '6.5.2.Final'
 }
 
 tasks.named('test') {
