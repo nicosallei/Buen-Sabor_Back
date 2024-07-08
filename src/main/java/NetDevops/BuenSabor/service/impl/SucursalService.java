@@ -133,13 +133,22 @@ public Sucursal updateDto(Long id, SucursalDto sucursalDto) throws Exception {
     }
 
     @Override
-    public List<Sucursal> traerPorEmpresaId(Long empresaId) throws Exception {
+    public List<Sucursal> traerTodoPorEmpresaId(Long empresaId) throws Exception {
         try {
             return sucursalRepository.findByEmpresaId(empresaId);
         } catch (Exception e) {
             throw new Exception(e.getMessage());
         }
     }
+    @Override
+public List<Sucursal> traerPorEmpresaId(Long empresaId) throws Exception {
+    try {
+        // Utiliza el nuevo método que filtra por empresaId y que no estén eliminadas
+        return sucursalRepository.findByEmpresaIdAndEliminadoFalse(empresaId);
+    } catch (Exception e) {
+        throw new Exception(e.getMessage());
+    }
+}
 
     @Override
     public Sucursal guardarSucursalDto(SucursalDto sucursalDto) throws Exception {

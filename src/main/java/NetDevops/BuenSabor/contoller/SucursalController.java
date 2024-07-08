@@ -80,6 +80,14 @@ public class SucursalController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+    @GetMapping("/lista-todo-sucursal/{empresaId}")
+    public ResponseEntity<?> traerTodoPorEmpresaId(@PathVariable Long empresaId){
+        try {
+            return ResponseEntity.ok(sucursalService.traerTodoPorEmpresaId(empresaId));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
     @PostMapping("/")
     @PreAuthorize(" hasAuthority('ADMINISTRADOR')")
     public ResponseEntity<?> guardarSucursalDto(@RequestBody SucursalDto sucursalDto){
