@@ -53,6 +53,8 @@ public ResponseEntity<?> traerCategoriasNoAsociadasASucursal(@PathVariable Long 
         return ResponseEntity.badRequest().body(e.getMessage());
     }
 }
+
+
     //endregion
 
     //region Promociones

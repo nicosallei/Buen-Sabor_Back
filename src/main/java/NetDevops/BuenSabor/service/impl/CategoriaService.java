@@ -428,24 +428,36 @@ public Set<CategoriaDto> traerCategoriaPadre(Long sucursalId) throws Exception {
     private IEmpresaRepository empresaRepository;
 
     public Categoria crearCategoriaporEmpresa(CategoriaEmpresaDTO categoriaEmpresaDTO) {
-    Empresa empresa = empresaRepository.findById(categoriaEmpresaDTO.getEmpresaId())
-            .orElseThrow(() -> new IllegalArgumentException("Empresa no encontrada"));
+        Empresa empresa = empresaRepository.findById(categoriaEmpresaDTO.getEmpresaId())
+                .orElseThrow(() -> new IllegalArgumentException("Empresa no encontrada"));
 
-    Categoria categoria = new Categoria();
-    categoria.setDenominacion(categoriaEmpresaDTO.getDenominacion());
-    categoria.setEmpresa(empresa);
+        // Verificar si ya existe una categoría con el mismo nombre (ignorando mayúsculas y minúsculas) para la empresa
+        boolean existeCategoria = categoriaRepository.existsByEmpresaAndDenominacionIgnoreCase(empresa, categoriaEmpresaDTO.getDenominacion());
+        if (existeCategoria) {
+            throw new IllegalArgumentException("Ya existe una categoría con el mismo nombre para esta empresa.");
+        }
 
-    return categoriaRepository.save(categoria);
-}
-
-    public Categoria actualizarDenominacion(Long id, String nuevaDenominacion) {
-        Categoria categoria = categoriaRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Categoría no encontrada"));
-
-        categoria.setDenominacion(nuevaDenominacion);
+        Categoria categoria = new Categoria();
+        categoria.setDenominacion(categoriaEmpresaDTO.getDenominacion());
+        categoria.setEmpresa(empresa);
 
         return categoriaRepository.save(categoria);
     }
+
+   public Categoria actualizarDenominacion(Long id, String nuevaDenominacion) {
+    Categoria categoria = categoriaRepository.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("Categoría no encontrada"));
+
+    // Verificar si existe otra categoría con el mismo nombre y misma empresa, excluyendo la categoría actual
+    boolean existeOtraCategoriaConMismoNombre = categoriaRepository.existsByDenominacionAndEmpresaIdAndIdNot(nuevaDenominacion, categoria.getEmpresa().getId(), id);
+    if (existeOtraCategoriaConMismoNombre) {
+        throw new IllegalArgumentException("Ya existe otra categoría con el mismo nombre en esta empresa.");
+    }
+
+    categoria.setDenominacion(nuevaDenominacion);
+
+    return categoriaRepository.save(categoria);
+}
 
     public Categoria cambiarEstadoEliminado(Long id) {
         Categoria categoria = categoriaRepository.findById(id)
@@ -456,32 +468,37 @@ public Set<CategoriaDto> traerCategoriaPadre(Long sucursalId) throws Exception {
         return categoriaRepository.save(categoria);
     }
 
-    public Categoria crearSubCategoriaConEmpresa(SubCategoriaConEmpresaDTO subCategoriaDTO) {
-        Categoria categoriaPadre = categoriaRepository.findById(subCategoriaDTO.getIdCategoriaPadre())
-                .orElseThrow(() -> new IllegalArgumentException("Categoría padre no encontrada"));
+   public Categoria crearSubCategoriaConEmpresa(SubCategoriaConEmpresaDTO subCategoriaDTO) {
+    Categoria categoriaPadre = categoriaRepository.findById(subCategoriaDTO.getIdCategoriaPadre())
+            .orElseThrow(() -> new IllegalArgumentException("Categoría padre no encontrada"));
 
-        // Verificar si la empresa de la categoría padre es nula
-        if (categoriaPadre.getEmpresa() == null) {
-            throw new IllegalArgumentException("La categoría padre no tiene una empresa asociada");
-        }
-
-        // Obtener el ID de la empresa de la categoría padre
-        Long idEmpresaCategoriaPadre = categoriaPadre.getEmpresa().getId();
-
-        Categoria subCategoria = new Categoria();
-        subCategoria.setDenominacion(subCategoriaDTO.getDenominacion());
-        subCategoria.setCategoriaPadre(categoriaPadre);
-
-        // Establecer la empresa de la categoría padre en la subcategoría
-        subCategoria.setEmpresa(categoriaPadre.getEmpresa());
-
-        categoriaPadre.agregarSubCategoria(subCategoria);
-
-        // Guardar el ID de la empresa de la categoría padre en el DTO
-        subCategoriaDTO.setIdEmpresaCategoriaPadre(idEmpresaCategoriaPadre);
-
-        return categoriaRepository.save(subCategoria);
+    // Verificar si la empresa de la categoría padre es nula
+    if (categoriaPadre.getEmpresa() == null) {
+        throw new IllegalArgumentException("La categoría padre no tiene una empresa asociada");
     }
+
+    // Verificar si ya existe una categoría con el mismo nombre (ignorando mayúsculas y minúsculas)
+    if (categoriaRepository.existsByDenominacionIgnoreCase(subCategoriaDTO.getDenominacion())) {
+        throw new IllegalArgumentException("Ya existe una categoría con el nombre proporcionado.");
+    }
+
+    // Obtener el ID de la empresa de la categoría padre
+    Long idEmpresaCategoriaPadre = categoriaPadre.getEmpresa().getId();
+
+    Categoria subCategoria = new Categoria();
+    subCategoria.setDenominacion(subCategoriaDTO.getDenominacion());
+    subCategoria.setCategoriaPadre(categoriaPadre);
+
+    // Establecer la empresa de la categoría padre en la subcategoría
+    subCategoria.setEmpresa(categoriaPadre.getEmpresa());
+
+    categoriaPadre.agregarSubCategoria(subCategoria);
+
+    // Guardar el ID de la empresa de la categoría padre en el DTO
+    subCategoriaDTO.setIdEmpresaCategoriaPadre(idEmpresaCategoriaPadre);
+
+    return categoriaRepository.save(subCategoria);
+}
    //---------------------
 
 
