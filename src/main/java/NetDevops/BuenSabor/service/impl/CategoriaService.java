@@ -598,5 +598,24 @@ public Set<CategoriaDto> traerTodo2(Long empresaId) throws Exception {
     }
 
 
+    public Set<CategoriaDto> traerCategoriasPadres() throws Exception {
+        try {
+            Set<Categoria> categoriasPadres = categoriaRepository.findByCategoriaPadreIsNullAndEliminadoFalse();
+            Set<CategoriaDto> categoriasPadresDto = new HashSet<>();
+            for (Categoria categoria : categoriasPadres) {
+                CategoriaDto categoriaDto = new CategoriaDto();
+                categoriaDto.setId(categoria.getId());
+                categoriaDto.setDenominacion(categoria.getDenominacion());
+                categoriaDto.setUrlIcono(categoria.getUrlIcono());
+                categoriaDto.setEliminado(categoria.isEliminado());
+                // Aquí puedes agregar más campos al DTO si es necesario
+
+                categoriasPadresDto.add(categoriaDto);
+            }
+            return categoriasPadresDto;
+        } catch (Exception e) {
+            throw new Exception("Error al obtener las categorías padres: " + e.getMessage(), e);
+        }
+    }
 
 }

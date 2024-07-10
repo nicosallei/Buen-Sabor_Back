@@ -2,6 +2,7 @@ package NetDevops.BuenSabor.contoller;
 
 
 import NetDevops.BuenSabor.dto.categoria.CategoriaEmpresaDTO;
+
 import NetDevops.BuenSabor.dto.categoria.SubCategoriaConEmpresaDTO;
 import NetDevops.BuenSabor.entities.Categoria;
 import NetDevops.BuenSabor.errores.ApiError;
@@ -249,6 +250,15 @@ public ResponseEntity<?> obtenerCategoriasPadre(@PathVariable Long sucursalId) {
     public ResponseEntity<?> obtenerCategoriasPorIdEmpresa(@PathVariable Long idEmpresa) {
         try {
             return ResponseEntity.ok(catService.traerTodo2(idEmpresa));
+        } catch (Exception e) {
+            ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, e.getMessage());
+            return new ResponseEntity<>(apiError, apiError.getStatus());
+        }
+    }
+    @GetMapping("/traer-categoria-padre")
+    public ResponseEntity<?> traerCategoriaPadre() {
+        try {
+            return ResponseEntity.ok(catService.traerCategoriasPadres());
         } catch (Exception e) {
             ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, e.getMessage());
             return new ResponseEntity<>(apiError, apiError.getStatus());

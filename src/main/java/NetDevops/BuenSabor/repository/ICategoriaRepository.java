@@ -46,7 +46,7 @@ boolean existsByDenominacionIgnoreCase(String denominacion);
 boolean existsByDenominacionAndEmpresaIdAndIdNot(String denominacion, Long empresaId, Long idNot);
 Set<Categoria> findBySucursalesNotContainsAndEmpresa(Sucursal sucursal, Empresa empresa);
     Set<Categoria> findByCategoriaPadre_IdAndSucursalesNotContainsAndEmpresa(Long categoriaPadreId, Sucursal sucursal, Empresa empresa);
-
+    Set<Categoria> findByCategoriaPadreIsNullAndEliminadoFalse();
 
 
 }

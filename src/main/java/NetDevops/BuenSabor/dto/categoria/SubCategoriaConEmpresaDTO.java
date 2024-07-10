@@ -1,6 +1,4 @@
 package NetDevops.BuenSabor.dto.categoria;
-
-
 import NetDevops.BuenSabor.dto.BaseDto;
 import lombok.Data;
 
