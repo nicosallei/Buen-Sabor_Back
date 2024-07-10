@@ -12,6 +12,7 @@ import NetDevops.BuenSabor.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.*;
 
 @Service
@@ -224,6 +225,21 @@ private SubCategoriaDto agregarSubCategoriasNoAsociadasASucursalRecursivamente(C
 //endregion
 
 //region Promociones
+public List<PromocionDto> buscarPromocionesActivas() throws Exception {
+    try {
+        LocalDate hoy = LocalDate.now();
+        List<Promocion> promociones = promocionRepository.findByEliminadoFalseAndFechaHastaAfter(hoy);
+        List<PromocionDto> dtos = new ArrayList<>();
+        for (Promocion promocion : promociones) {
+            dtos.add(convertToDto(promocion));
+        }
+        return dtos;
+    } catch (Exception e) {
+        throw new Exception("Error al buscar promociones activas: " + e.getMessage(), e);
+    }
+}
+
+
     public List<PromocionDto> buscarPromocionesPorSucursal(Long sucursalId) throws Exception{
     try{
         List<Promocion> promociones = promocionRepository.findBySucursales_Id(sucursalId);

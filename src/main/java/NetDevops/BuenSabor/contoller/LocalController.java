@@ -58,6 +58,16 @@ public ResponseEntity<?> traerCategoriasNoAsociadasASucursal(@PathVariable Long 
     //endregion
 
     //region Promociones
+
+    @GetMapping("/promocion/activas")
+    public ResponseEntity<?> traerTodo(){
+        try {
+            return ResponseEntity.ok().body(localService.buscarPromocionesActivas());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
     @GetMapping("/promocion/sucursal/{sucursalId}")
     public ResponseEntity<?> traerPromocionesPorSucursal(@PathVariable Long sucursalId){
         try {
