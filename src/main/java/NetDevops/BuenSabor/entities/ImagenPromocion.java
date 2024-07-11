@@ -2,6 +2,7 @@ package NetDevops.BuenSabor.entities;
 
 import jakarta.persistence.Entity;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 @Entity
 @AllArgsConstructor
@@ -9,6 +10,7 @@ import lombok.*;
 @Setter
 @Getter
 @ToString
+@SuperBuilder
 @Builder
 //@Audited
 public class ImagenPromocion extends Base{

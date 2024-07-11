@@ -1,10 +1,16 @@
 package NetDevops.BuenSabor.entities;
 
 import jakarta.persistence.Entity;
-import lombok.Data;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 @Entity
-@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Setter
+@Getter
+@ToString
+@SuperBuilder
 //@Audited
 public class ImagenCliente extends Base{
     private String url;

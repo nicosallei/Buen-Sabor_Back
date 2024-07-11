@@ -2,11 +2,14 @@ package NetDevops.BuenSabor.dto.usuario;
 
 import NetDevops.BuenSabor.dto.BaseDto;
 import NetDevops.BuenSabor.entities.Cliente;
-import lombok.Data;
+import lombok.*;
 
 import java.time.LocalDate;
 
-@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Setter
+@Getter
 public class RegistroDto extends BaseDto {
     private String username;
     private String password;

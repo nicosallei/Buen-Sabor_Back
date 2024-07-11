@@ -1,9 +1,12 @@
 package NetDevops.BuenSabor.dto.categoria;
 
 import NetDevops.BuenSabor.dto.BaseDto;
-import lombok.Data;
+import lombok.*;
 
-@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Setter
+@Getter
 public class SubCategoriaListaDto extends BaseDto {
 
     private String denominacion;

@@ -2,11 +2,14 @@ package NetDevops.BuenSabor.dto.sucursal;
 
 import NetDevops.BuenSabor.dto.BaseDto;
 import NetDevops.BuenSabor.entities.Empresa;
-import lombok.Data;
+import lombok.*;
 
 import java.time.LocalTime;
 
-@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Setter
+@Getter
 public class SucursalDto extends BaseDto {
 
     private String nombre;

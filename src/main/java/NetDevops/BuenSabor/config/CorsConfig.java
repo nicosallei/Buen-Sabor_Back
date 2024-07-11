@@ -9,8 +9,9 @@ public class CorsConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("*") // Permitir solicitudes desde cualquier origen
-                .allowedMethods("GET", "POST", "PUT", "DELETE") // Permitir los métodos HTTP especificados
-                .allowedHeaders("*"); // Permitir todos los encabezados en las solicitudes
+                .allowedOrigins("*")
+                .allowedOrigins("https://ecommerce-buen-sabor.vercel.app")
+                .allowedMethods("GET", "POST", "PUT", "DELETE")
+                .allowedHeaders("*");
     }
 }

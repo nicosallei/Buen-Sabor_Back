@@ -5,13 +5,16 @@ import NetDevops.BuenSabor.entities.Domicilio;
 import NetDevops.BuenSabor.enums.Estado;
 import NetDevops.BuenSabor.enums.FormaPago;
 import NetDevops.BuenSabor.enums.TipoEnvio;
-import lombok.Data;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
-@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Setter
+@Getter
 public class PedidoDto extends BaseDto {
     private Long id;
     private LocalTime hora;

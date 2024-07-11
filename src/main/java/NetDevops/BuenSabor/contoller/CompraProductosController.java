@@ -22,6 +22,7 @@ public class CompraProductosController {
 
     //region CRUD Basico
 
+    @CrossOrigin(origins = "https://ecommerce-buen-sabor.vercel.app")
     @GetMapping("/{categoriaId}")
     public ResponseEntity<?> findArticulosByCategoria(@PathVariable Long categoriaId) {
         try {

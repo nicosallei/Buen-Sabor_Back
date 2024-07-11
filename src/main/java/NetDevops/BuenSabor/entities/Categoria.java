@@ -2,13 +2,19 @@ package NetDevops.BuenSabor.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 @Entity
-@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Setter
+@Getter
+@ToString
+@SuperBuilder
 //@Audited
 public class Categoria extends Base{
 
@@ -19,6 +25,7 @@ public class Categoria extends Base{
 
 
     @OneToMany(mappedBy = "categoria")
+    @Builder.Default
     private Set<Articulo> articulos = new HashSet<>();
 //----------
 

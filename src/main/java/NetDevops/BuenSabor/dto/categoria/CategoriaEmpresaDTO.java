@@ -1,12 +1,15 @@
 package NetDevops.BuenSabor.dto.categoria;
 
 import NetDevops.BuenSabor.dto.BaseDto;
-import lombok.Data;
+import lombok.*;
 
 import java.util.HashSet;
 import java.util.Set;
 
-@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Setter
+@Getter
 public class CategoriaEmpresaDTO extends BaseDto {
 
     private String denominacion;

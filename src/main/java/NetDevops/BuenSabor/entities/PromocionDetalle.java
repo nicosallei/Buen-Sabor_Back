@@ -6,6 +6,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 @Entity
 @AllArgsConstructor
@@ -13,6 +14,7 @@ import lombok.*;
 @Setter
 @Getter
 @Builder
+@ToString
 //@Audited
 public class PromocionDetalle extends Base{
     private int cantidad;

@@ -2,13 +2,19 @@ package NetDevops.BuenSabor.entities;
 
 import NetDevops.BuenSabor.enums.Rol;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDate;
 import java.util.List;
 
 @Entity
-@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Setter
+@Getter
+@ToString
+@SuperBuilder
 //@Audited
 public class Cliente extends Base{
 
@@ -17,6 +23,7 @@ public class Cliente extends Base{
     private String telefono;
     private String email;
     private LocalDate fechaNacimiento;
+    @Builder.Default
     private Rol rol = Rol.CLIENTE;
     private String imagen;
 
