@@ -7,13 +7,16 @@ import NetDevops.BuenSabor.entities.Categoria;
 import NetDevops.BuenSabor.entities.ImagenArticulo;
 import NetDevops.BuenSabor.entities.Sucursal;
 import NetDevops.BuenSabor.entities.UnidadMedida;
-import lombok.Data;
+import lombok.*;
 
 import java.util.HashSet;
 import java.util.Set;
 
 
-@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Setter
+@Getter
 public class ArticuloManufacturadoDto extends BaseDto {
     private String denominacion;
     private String descripcion;

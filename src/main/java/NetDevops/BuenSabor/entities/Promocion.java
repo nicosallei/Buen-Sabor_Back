@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
@@ -19,6 +20,7 @@ import java.util.Set;
 @Getter
 @ToString
 @Builder
+
 //@Audited
 public class Promocion extends Base{
 
@@ -38,6 +40,7 @@ public class Promocion extends Base{
 
     @OneToMany(cascade = CascadeType.ALL)
     @JsonManagedReference
+    @Builder.Default
     private Set<PromocionDetalle> promocionDetalles = new HashSet<>();
 
 //    @OneToMany(cascade = CascadeType.ALL)
@@ -47,6 +50,7 @@ public class Promocion extends Base{
 
 
    @ManyToMany
+   @Builder.Default
     private Set<Sucursal> sucursales = new HashSet<>();
 
 }

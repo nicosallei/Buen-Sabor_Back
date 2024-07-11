@@ -5,11 +5,14 @@ import NetDevops.BuenSabor.entities.*;
 import NetDevops.BuenSabor.enums.Estado;
 import NetDevops.BuenSabor.enums.FormaPago;
 import NetDevops.BuenSabor.enums.TipoEnvio;
-import lombok.Data;
+import lombok.*;
 
 import java.util.List;
 
-@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Setter
+@Getter
 public class CompraPedidoDto extends BaseDto {
     private String hora;
     private Double total;

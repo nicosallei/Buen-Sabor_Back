@@ -1,9 +1,12 @@
 package NetDevops.BuenSabor.dto.sucursal;
 
 import NetDevops.BuenSabor.dto.BaseDto;
-import lombok.Data;
+import lombok.*;
 
-@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Setter
+@Getter
 public class SucursalSimpleDto extends BaseDto {
     private String nombre;
 }

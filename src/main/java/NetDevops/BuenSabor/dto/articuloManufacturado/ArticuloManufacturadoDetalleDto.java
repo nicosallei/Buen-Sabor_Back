@@ -4,9 +4,12 @@ import NetDevops.BuenSabor.dto.BaseDto;
 
 
 import NetDevops.BuenSabor.dto.articuloInsumo.ArticuloInsumoDto;
-import lombok.Data;
+import lombok.*;
 
-@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Setter
+@Getter
 public class ArticuloManufacturadoDetalleDto extends BaseDto {
 
     private ArticuloInsumoDto articuloInsumoDto;

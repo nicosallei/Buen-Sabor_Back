@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 @Entity
 @AllArgsConstructor
@@ -12,6 +13,7 @@ import lombok.*;
 @Setter
 @Getter
 @ToString
+@SuperBuilder
 //@Audited
 public class ImagenArticulo extends Base{
 

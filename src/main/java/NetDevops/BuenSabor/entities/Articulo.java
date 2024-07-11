@@ -13,11 +13,11 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
+@Setter
 @Getter
 @ToString
-@Setter
 @SuperBuilder
 //@Audited
 
@@ -31,6 +31,7 @@ public abstract class Articulo extends Base{
     protected Double precioVenta;
     @JsonManagedReference
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "articulo")
+    @Builder.Default
     protected Set<ImagenArticulo> imagenes = new HashSet<>();
     @ManyToOne
     protected UnidadMedida unidadMedida;

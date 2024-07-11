@@ -4,7 +4,8 @@ import NetDevops.BuenSabor.enums.Estado;
 import NetDevops.BuenSabor.enums.FormaPago;
 import NetDevops.BuenSabor.enums.TipoEnvio;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 
 import java.time.LocalDate;
@@ -12,7 +13,12 @@ import java.time.LocalTime;
 import java.util.List;
 
 @Entity
-@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Setter
+@Getter
+@ToString
+@SuperBuilder
 //@Audited
 public class Pedido extends Base{
     private LocalTime hora;
