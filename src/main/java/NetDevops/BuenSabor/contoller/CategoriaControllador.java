@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 
@@ -240,9 +241,9 @@ public ResponseEntity<?> obtenerCategoriasPadre(@PathVariable Long sucursalId) {
 
     @PostMapping("/subcategoriaConEmpresa")
 
-    public ResponseEntity<Categoria> crearSubCategoriaConEmpresa(@RequestBody SubCategoriaConEmpresaDTO subCategoriaDTO) {
-        Categoria nuevaSubCategoria = catService.crearSubCategoriaConEmpresa(subCategoriaDTO);
-        return ResponseEntity.ok(nuevaSubCategoria);
+    public ResponseEntity<?> crearSubCategoriaConEmpresa(@RequestBody SubCategoriaConEmpresaDTO subCategoriaDTO) throws IOException {
+
+        return ResponseEntity.ok(catService.crearSubCategoriaConEmpresa(subCategoriaDTO));
     }
 
     //------------------

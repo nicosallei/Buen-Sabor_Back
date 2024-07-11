@@ -11,10 +11,12 @@ import NetDevops.BuenSabor.repository.ICategoriaRepository;
 import NetDevops.BuenSabor.repository.IEmpresaRepository;
 import NetDevops.BuenSabor.repository.ISucursalRepository;
 import NetDevops.BuenSabor.service.ICategoriaService;
+import NetDevops.BuenSabor.service.funcionalidades.Funcionalidades;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -26,6 +28,8 @@ public class CategoriaService implements ICategoriaService {
     private IArticuloRepository articuloRepository;
     @Autowired
     private ISucursalRepository sucursalRepository;
+    @Autowired
+    private Funcionalidades funcionalidades;
 
 @Override
 public Categoria cargar(Categoria categoria) throws Exception {
@@ -427,7 +431,7 @@ public Set<CategoriaDto> traerCategoriaPadre(Long sucursalId) throws Exception {
     @Autowired
     private IEmpresaRepository empresaRepository;
 
-    public Categoria crearCategoriaporEmpresa(CategoriaEmpresaDTO categoriaEmpresaDTO) {
+    public Categoria crearCategoriaporEmpresa(CategoriaEmpresaDTO categoriaEmpresaDTO) throws IOException {
         Empresa empresa = empresaRepository.findById(categoriaEmpresaDTO.getEmpresaId())
                 .orElseThrow(() -> new IllegalArgumentException("Empresa no encontrada"));
 
@@ -438,6 +442,12 @@ public Set<CategoriaDto> traerCategoriaPadre(Long sucursalId) throws Exception {
         }
 
         Categoria categoria = new Categoria();
+
+        if (categoriaEmpresaDTO.getUrlIcono() != null) {
+            String rutaImagen = funcionalidades.guardarImagen(categoriaEmpresaDTO.getUrlIcono(), UUID.randomUUID().toString() + ".jpg");
+            categoria.setUrlIcono(rutaImagen);
+        }
+
         categoria.setDenominacion(categoriaEmpresaDTO.getDenominacion());
         categoria.setEmpresa(empresa);
 
@@ -468,7 +478,7 @@ public Set<CategoriaDto> traerCategoriaPadre(Long sucursalId) throws Exception {
         return categoriaRepository.save(categoria);
     }
 
-   public Categoria crearSubCategoriaConEmpresa(SubCategoriaConEmpresaDTO subCategoriaDTO) {
+   public CategoriaDto crearSubCategoriaConEmpresa(SubCategoriaConEmpresaDTO subCategoriaDTO) throws IOException {
     Categoria categoriaPadre = categoriaRepository.findById(subCategoriaDTO.getIdCategoriaPadre())
             .orElseThrow(() -> new IllegalArgumentException("Categoría padre no encontrada"));
 
@@ -486,6 +496,12 @@ public Set<CategoriaDto> traerCategoriaPadre(Long sucursalId) throws Exception {
     Long idEmpresaCategoriaPadre = categoriaPadre.getEmpresa().getId();
 
     Categoria subCategoria = new Categoria();
+
+       if (subCategoriaDTO.getUrlIcono() != null) {
+           String rutaImagen = funcionalidades.guardarImagen(subCategoriaDTO.getUrlIcono(), UUID.randomUUID().toString() + ".jpg");
+           subCategoria.setUrlIcono(rutaImagen);
+       }
+
     subCategoria.setDenominacion(subCategoriaDTO.getDenominacion());
     subCategoria.setCategoriaPadre(categoriaPadre);
 
@@ -496,8 +512,15 @@ public Set<CategoriaDto> traerCategoriaPadre(Long sucursalId) throws Exception {
 
     // Guardar el ID de la empresa de la categoría padre en el DTO
     subCategoriaDTO.setIdEmpresaCategoriaPadre(idEmpresaCategoriaPadre);
+       categoriaRepository.save(subCategoria);
+       CategoriaDto dto = new CategoriaDto();
+         dto.setId(subCategoria.getId());
+            dto.setDenominacion(subCategoria.getDenominacion());
+            dto.setUrlIcono(subCategoria.getUrlIcono());
 
-    return categoriaRepository.save(subCategoria);
+
+
+    return dto;
 }
    //---------------------
 

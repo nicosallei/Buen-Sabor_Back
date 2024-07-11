@@ -12,5 +12,7 @@ public class CategoriaEmpresaDTO extends BaseDto {
     private String denominacion;
     private boolean eliminado;
     private Long empresaId;
+    private String urlIcono;
+
     private Set<SubCategoriaConEmpresaDTO> subCategoriaDtos = new HashSet<>();
 }
