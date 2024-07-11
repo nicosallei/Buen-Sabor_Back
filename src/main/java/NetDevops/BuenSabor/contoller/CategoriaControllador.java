@@ -256,6 +256,7 @@ public ResponseEntity<?> obtenerCategoriasPadre(@PathVariable Long sucursalId) {
             return new ResponseEntity<>(apiError, apiError.getStatus());
         }
     }
+    @CrossOrigin(origins = "https://ecommerce-buen-sabor.vercel.app")
     @GetMapping("/traer-categoria-padre")
     public ResponseEntity<?> traerCategoriaPadre() {
         try {

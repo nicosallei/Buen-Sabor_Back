@@ -59,6 +59,7 @@ public ResponseEntity<?> traerCategoriasNoAsociadasASucursal(@PathVariable Long 
 
     //region Promociones
 
+    @CrossOrigin(origins = "https://ecommerce-buen-sabor.vercel.app")
     @GetMapping("/promocion/activas")
     public ResponseEntity<?> traerTodo(){
         try {
