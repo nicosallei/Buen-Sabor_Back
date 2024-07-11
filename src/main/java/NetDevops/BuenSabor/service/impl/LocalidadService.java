@@ -18,7 +18,7 @@ public class LocalidadService implements ILocalidadService {
     public Boolean eliminar(Long id) throws Exception {
         try {
             Localidad localidad = localidadRepository.findById(id).get();
-            localidad.setEliminado(true);
+            //localidad.setEliminado(true);
             return true;
         } catch (Exception e) {
             throw new Exception(e.getMessage());
@@ -67,7 +67,7 @@ public class LocalidadService implements ILocalidadService {
     public Boolean reactivar(Long id) throws Exception {
         try {
             Localidad localidad = localidadRepository.findById(id).get();
-            localidad.setEliminado(false);
+            //localidad.setEliminado(false);
             return true;
         } catch (Exception e) {
             throw new Exception(e.getMessage());
