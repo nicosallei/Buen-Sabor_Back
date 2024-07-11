@@ -297,10 +297,10 @@ public PromocionDto convertToDto(Promocion promocion) {
         dto.setImagen(promocion.getImagen());
     }
 
-//    dto.setSucursales(promocion.getSucursales());
-//    for (PromocionDetalle promocionDetalle : promocion.getPromocionDetalles()) {
-//        dto.getPromocionDetallesDto().add(convertToDto(promocionDetalle));
-//    }
+    //dto.setSucursales(promocion.getSucursales());
+    for (PromocionDetalle promocionDetalle : promocion.getPromocionDetalles()) {
+        dto.getPromocionDetallesDto().add(convertToDto(promocionDetalle));
+    }
     return dto;
 }
 
