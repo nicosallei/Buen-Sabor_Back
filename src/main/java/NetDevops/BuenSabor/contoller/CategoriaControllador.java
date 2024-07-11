@@ -1,6 +1,7 @@
 package NetDevops.BuenSabor.contoller;
 
 
+import NetDevops.BuenSabor.dto.categoria.CategoriaDto;
 import NetDevops.BuenSabor.dto.categoria.CategoriaEmpresaDTO;
 
 import NetDevops.BuenSabor.dto.categoria.SubCategoriaConEmpresaDTO;
@@ -219,10 +220,9 @@ public ResponseEntity<?> obtenerCategoriasPadre(@PathVariable Long sucursalId) {
     }
 
     @PutMapping("/{id}/denominacion")
-
-    public ResponseEntity<?> actualizarDenominacion(@PathVariable Long id, @RequestBody String nuevaDenominacion) throws Exception {
+    public ResponseEntity<?> actualizarDenominacion(@PathVariable Long id, @RequestBody CategoriaDto dto) throws Exception {
         try {
-            Categoria categoriaActualizada = catService.actualizarDenominacion(id, nuevaDenominacion);
+            CategoriaDto categoriaActualizada = catService.actualizarDenominacion(id, dto.getDenominacion(), dto.getUrlIcono());
             return ResponseEntity.ok(categoriaActualizada);
 
         } catch (Exception e) {

@@ -454,7 +454,7 @@ public Set<CategoriaDto> traerCategoriaPadre(Long sucursalId) throws Exception {
         return categoriaRepository.save(categoria);
     }
 
-   public Categoria actualizarDenominacion(Long id, String nuevaDenominacion) {
+   public CategoriaDto actualizarDenominacion(Long id, String nuevaDenominacion,String imagen64) throws IOException {
     Categoria categoria = categoriaRepository.findById(id)
             .orElseThrow(() -> new IllegalArgumentException("Categoría no encontrada"));
 
@@ -464,9 +464,23 @@ public Set<CategoriaDto> traerCategoriaPadre(Long sucursalId) throws Exception {
         throw new IllegalArgumentException("Ya existe otra categoría con el mismo nombre en esta empresa.");
     }
 
-    categoria.setDenominacion(nuevaDenominacion);
+       if (imagen64 != null ) {
+           // Eliminar la imagen antigua
+           if(categoria.getUrlIcono() != null){
+               funcionalidades.eliminarImagen(categoria.getUrlIcono());
+           }
+           // Guardar la nueva imagen
+           String rutaImagen = funcionalidades.guardarImagen(imagen64, UUID.randomUUID().toString() + ".jpg");
+           categoria.setUrlIcono(rutaImagen);
+       }
 
-    return categoriaRepository.save(categoria);
+    categoria.setDenominacion(nuevaDenominacion);
+       categoriaRepository.save(categoria);
+       CategoriaDto dto = new CategoriaDto();
+         dto.setId(categoria.getId());
+            dto.setDenominacion(categoria.getDenominacion());
+            dto.setUrlIcono(categoria.getUrlIcono());
+    return dto;
 }
 
     public Categoria cambiarEstadoEliminado(Long id) {
