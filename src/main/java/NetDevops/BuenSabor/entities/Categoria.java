@@ -9,6 +9,7 @@ import java.util.Set;
 
 @Entity
 @Data
+//@Audited
 public class Categoria extends Base{
 
     @ManyToMany

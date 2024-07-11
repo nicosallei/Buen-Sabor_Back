@@ -169,7 +169,7 @@ public Set<ArticuloManufacturado> listaArticuloManufacturado() throws Exception 
     //region Actualizar
 
 @Override
-public ArticuloManufacturado actualizarArticuloManufacturado(Long id, ArticuloManufacturado articuloManufacturado) throws Exception {
+public ArticuloManufacturadoDto actualizarArticuloManufacturado(Long id, ArticuloManufacturado articuloManufacturado) throws Exception {
     try {
         if (!articuloManufacturadoRepository.existsById(id)){
             throw new Exception("No se encontro el articulo");
@@ -237,8 +237,8 @@ public ArticuloManufacturado actualizarArticuloManufacturado(Long id, ArticuloMa
         articuloManufacturado.setPrecioVenta(articuloManufacturadoViejo.getPrecioVenta());
         articuloManufacturado.setTiempoEstimadoMinutos(articuloManufacturadoViejo.getTiempoEstimadoMinutos());
         articuloManufacturado.setSucursal(articuloManufacturadoViejo.getSucursal());
-
-        return articuloManufacturadoRepository.save(articuloManufacturado);
+        ArticuloManufacturadoDto dto= mapeoDto.convertManufacturadoDto(articuloManufacturadoRepository.save(articuloManufacturado));
+        return dto;
 
     } catch (Exception e) {
         throw new Exception(e);

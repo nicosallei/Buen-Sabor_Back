@@ -10,6 +10,7 @@ import lombok.*;
 @Getter
 @ToString
 @Builder
+//@Audited
 public class ImagenPromocion extends Base{
     private String url;
 }

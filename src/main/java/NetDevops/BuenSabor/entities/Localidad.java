@@ -7,6 +7,7 @@ import lombok.Data;
 
 @Entity
 @Data
+//@Audited
 public class Localidad extends Base {
     private String nombre;
     @ManyToOne(cascade = CascadeType.PERSIST)

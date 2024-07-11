@@ -30,7 +30,7 @@ public interface ICategoriaRepository extends JpaRepository<Categoria, Long> {
 //----------------
 
 
-
+    boolean existsByEmpresaAndDenominacionIgnoreCase(Empresa empresa, String denominacion);
 
     @Query("SELECT c FROM Categoria c WHERE c.categoriaPadre IS NULL OR c.categoriaPadre.id = 0")
     Set<Categoria> ListaCategorias();
@@ -42,8 +42,11 @@ public interface ICategoriaRepository extends JpaRepository<Categoria, Long> {
     Set<Categoria> findByCategoriaPadre_IdAndSucursales_Id(Long categoriaPadreId, Long sucursalId);
     Set<Categoria> findBySucursalesNotContains(Sucursal sucursal);
     Set<Categoria> findByCategoriaPadre_IdAndSucursalesNotContains(Long categoriaPadreId, Sucursal sucursal);
-
+boolean existsByDenominacionIgnoreCase(String denominacion);
+boolean existsByDenominacionAndEmpresaIdAndIdNot(String denominacion, Long empresaId, Long idNot);
 Set<Categoria> findBySucursalesNotContainsAndEmpresa(Sucursal sucursal, Empresa empresa);
     Set<Categoria> findByCategoriaPadre_IdAndSucursalesNotContainsAndEmpresa(Long categoriaPadreId, Sucursal sucursal, Empresa empresa);
+    Set<Categoria> findByCategoriaPadreIsNullAndEliminadoFalse();
+
 
 }

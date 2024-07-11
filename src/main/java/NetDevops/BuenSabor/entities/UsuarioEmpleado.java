@@ -5,6 +5,7 @@ import lombok.Data;
 
 @Entity
 @Data
+//@Audited
 public class UsuarioEmpleado extends Base{
     private String username;
     private String password;

@@ -62,35 +62,42 @@ public Sucursal save(Sucursal sucursal) throws Exception {
         }
     }
 
-   @Override
-public Sucursal update(Long id, Sucursal sucursal) throws Exception {
+@Override
+public Sucursal updateDto(Long id, SucursalDto sucursalDto) throws Exception {
     try {
-        if(sucursalRepository.existsByNombreAndNotId(sucursal.getNombre(), id)){
+        Sucursal sucursalExistente = sucursalRepository.findById(id).orElseThrow(() -> new Exception("No se encontró la sucursal con el id proporcionado"));
+
+        // Verificar si existe otra sucursal con el mismo nombre pero diferente ID
+        if(sucursalRepository.existsByNombreAndNotId(sucursalDto.getNombre(), id)){
             throw new Exception("Ya existe una sucursal con el nombre proporcionado");
         }
-        Sucursal sucursalVieja = sucursalRepository.findById(id).orElse(null);
-        sucursal.setId(id);
-        if (sucursal.getEmpresa() == null) {
-            sucursal.setEmpresa(sucursalVieja.getEmpresa());
-        }
-        if (sucursal.getDomicilio() == null) {
-            sucursal.setDomicilio(sucursalVieja.getDomicilio());
-        }
-        if (sucursal.getImagen() != null ) {
-            // Eliminar la imagen antigua
-            if(sucursalVieja.getImagen() != null){
-                funcionalidades.eliminarImagen(sucursalVieja.getImagen());
+
+        // Actualizar los campos de la sucursal existente con los valores del SucursalDto
+        sucursalExistente.setNombre(sucursalDto.getNombre());
+        // Aquí deberías actualizar otros campos relevantes de SucursalDto, excepto aquellos que implican relaciones con otras entidades
+        sucursalExistente.setHoraApertura(sucursalDto.getHoraApertura());
+        sucursalExistente.setHoraCierre(sucursalDto.getHoraCierre());
+        sucursalExistente.getDomicilio().setNumero(Integer.valueOf(sucursalDto.getNumero()));
+        sucursalExistente.getDomicilio().setCalle(sucursalDto.getCalle());
+        sucursalExistente.getDomicilio().setCp(Integer.valueOf(sucursalDto.getCp()));
+
+        // Si se proporciona una nueva imagen, guardarla y actualizar el campo de imagen
+        if (sucursalDto.getImagen() != null && !sucursalDto.getImagen().isEmpty()) {
+            // Eliminar la imagen antigua si existe
+            if(sucursalExistente.getImagen() != null){
+                funcionalidades.eliminarImagen(sucursalExistente.getImagen());
             }
             // Guardar la nueva imagen
-            String rutaImagen = funcionalidades.guardarImagen(sucursal.getImagen(), UUID.randomUUID().toString() + ".jpg");
-            sucursalVieja.setImagen(rutaImagen);
-            sucursal.setImagen(rutaImagen);
-        }else {
-            sucursal.setImagen(sucursalVieja.getImagen());
+            String rutaImagen = funcionalidades.guardarImagen(sucursalDto.getImagen(), UUID.randomUUID().toString() + ".jpg");
+            sucursalExistente.setImagen(rutaImagen);
+        } else if (sucursalDto.getImagen() != null) {
+            String rutaImagen = funcionalidades.guardarImagen(sucursalDto.getImagen(), UUID.randomUUID().toString() + ".jpg");
+            sucursalExistente.setImagen(rutaImagen);
         }
 
 
-        return sucursalRepository.save(sucursal);
+        // Guardar la sucursal actualizada en el repositorio
+        return sucursalRepository.save(sucursalExistente);
     } catch (Exception e) {
         throw new Exception(e.getMessage());
     }
@@ -126,13 +133,22 @@ public Sucursal update(Long id, Sucursal sucursal) throws Exception {
     }
 
     @Override
-    public List<Sucursal> traerPorEmpresaId(Long empresaId) throws Exception {
+    public List<Sucursal> traerTodoPorEmpresaId(Long empresaId) throws Exception {
         try {
             return sucursalRepository.findByEmpresaId(empresaId);
         } catch (Exception e) {
             throw new Exception(e.getMessage());
         }
     }
+    @Override
+public List<Sucursal> traerPorEmpresaId(Long empresaId) throws Exception {
+    try {
+        // Utiliza el nuevo método que filtra por empresaId y que no estén eliminadas
+        return sucursalRepository.findByEmpresaIdAndEliminadoFalse(empresaId);
+    } catch (Exception e) {
+        throw new Exception(e.getMessage());
+    }
+}
 
     @Override
     public Sucursal guardarSucursalDto(SucursalDto sucursalDto) throws Exception {
@@ -160,7 +176,11 @@ public Sucursal update(Long id, Sucursal sucursal) throws Exception {
             sucursal.setHoraApertura(sucursalDto.getHoraApertura());
             sucursal.setHoraCierre(sucursalDto.getHoraCierre());
             sucursal.setDomicilio(domicilio);
-//            sucursal.setImagen(sucursalDto.getImagen());
+
+            if (sucursalDto.getImagen() != null) {
+                String rutaImagen = funcionalidades.guardarImagen(sucursalDto.getImagen(), UUID.randomUUID().toString() + ".jpg");
+                sucursal.setImagen(rutaImagen);
+            }
 
             return sucursalRepository.save(sucursal);
         } catch (Exception e) {

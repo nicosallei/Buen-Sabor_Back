@@ -11,10 +11,12 @@ import NetDevops.BuenSabor.repository.ICategoriaRepository;
 import NetDevops.BuenSabor.repository.IEmpresaRepository;
 import NetDevops.BuenSabor.repository.ISucursalRepository;
 import NetDevops.BuenSabor.service.ICategoriaService;
+import NetDevops.BuenSabor.service.funcionalidades.Funcionalidades;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -26,6 +28,8 @@ public class CategoriaService implements ICategoriaService {
     private IArticuloRepository articuloRepository;
     @Autowired
     private ISucursalRepository sucursalRepository;
+    @Autowired
+    private Funcionalidades funcionalidades;
 
 @Override
 public Categoria cargar(Categoria categoria) throws Exception {
@@ -427,25 +431,43 @@ public Set<CategoriaDto> traerCategoriaPadre(Long sucursalId) throws Exception {
     @Autowired
     private IEmpresaRepository empresaRepository;
 
-    public Categoria crearCategoriaporEmpresa(CategoriaEmpresaDTO categoriaEmpresaDTO) {
-    Empresa empresa = empresaRepository.findById(categoriaEmpresaDTO.getEmpresaId())
-            .orElseThrow(() -> new IllegalArgumentException("Empresa no encontrada"));
+    public Categoria crearCategoriaporEmpresa(CategoriaEmpresaDTO categoriaEmpresaDTO) throws IOException {
+        Empresa empresa = empresaRepository.findById(categoriaEmpresaDTO.getEmpresaId())
+                .orElseThrow(() -> new IllegalArgumentException("Empresa no encontrada"));
 
-    Categoria categoria = new Categoria();
-    categoria.setDenominacion(categoriaEmpresaDTO.getDenominacion());
-    categoria.setEmpresa(empresa);
+        // Verificar si ya existe una categoría con el mismo nombre (ignorando mayúsculas y minúsculas) para la empresa
+        boolean existeCategoria = categoriaRepository.existsByEmpresaAndDenominacionIgnoreCase(empresa, categoriaEmpresaDTO.getDenominacion());
+        if (existeCategoria) {
+            throw new IllegalArgumentException("Ya existe una categoría con el mismo nombre para esta empresa.");
+        }
 
-    return categoriaRepository.save(categoria);
-}
+        Categoria categoria = new Categoria();
 
-    public Categoria actualizarDenominacion(Long id, String nuevaDenominacion) {
-        Categoria categoria = categoriaRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Categoría no encontrada"));
+        if (categoriaEmpresaDTO.getUrlIcono() != null) {
+            String rutaImagen = funcionalidades.guardarImagen(categoriaEmpresaDTO.getUrlIcono(), UUID.randomUUID().toString() + ".jpg");
+            categoria.setUrlIcono(rutaImagen);
+        }
 
-        categoria.setDenominacion(nuevaDenominacion);
+        categoria.setDenominacion(categoriaEmpresaDTO.getDenominacion());
+        categoria.setEmpresa(empresa);
 
         return categoriaRepository.save(categoria);
     }
+
+   public Categoria actualizarDenominacion(Long id, String nuevaDenominacion) {
+    Categoria categoria = categoriaRepository.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("Categoría no encontrada"));
+
+    // Verificar si existe otra categoría con el mismo nombre y misma empresa, excluyendo la categoría actual
+    boolean existeOtraCategoriaConMismoNombre = categoriaRepository.existsByDenominacionAndEmpresaIdAndIdNot(nuevaDenominacion, categoria.getEmpresa().getId(), id);
+    if (existeOtraCategoriaConMismoNombre) {
+        throw new IllegalArgumentException("Ya existe otra categoría con el mismo nombre en esta empresa.");
+    }
+
+    categoria.setDenominacion(nuevaDenominacion);
+
+    return categoriaRepository.save(categoria);
+}
 
     public Categoria cambiarEstadoEliminado(Long id) {
         Categoria categoria = categoriaRepository.findById(id)
@@ -456,32 +478,50 @@ public Set<CategoriaDto> traerCategoriaPadre(Long sucursalId) throws Exception {
         return categoriaRepository.save(categoria);
     }
 
-    public Categoria crearSubCategoriaConEmpresa(SubCategoriaConEmpresaDTO subCategoriaDTO) {
-        Categoria categoriaPadre = categoriaRepository.findById(subCategoriaDTO.getIdCategoriaPadre())
-                .orElseThrow(() -> new IllegalArgumentException("Categoría padre no encontrada"));
+   public CategoriaDto crearSubCategoriaConEmpresa(SubCategoriaConEmpresaDTO subCategoriaDTO) throws IOException {
+    Categoria categoriaPadre = categoriaRepository.findById(subCategoriaDTO.getIdCategoriaPadre())
+            .orElseThrow(() -> new IllegalArgumentException("Categoría padre no encontrada"));
 
-        // Verificar si la empresa de la categoría padre es nula
-        if (categoriaPadre.getEmpresa() == null) {
-            throw new IllegalArgumentException("La categoría padre no tiene una empresa asociada");
-        }
-
-        // Obtener el ID de la empresa de la categoría padre
-        Long idEmpresaCategoriaPadre = categoriaPadre.getEmpresa().getId();
-
-        Categoria subCategoria = new Categoria();
-        subCategoria.setDenominacion(subCategoriaDTO.getDenominacion());
-        subCategoria.setCategoriaPadre(categoriaPadre);
-
-        // Establecer la empresa de la categoría padre en la subcategoría
-        subCategoria.setEmpresa(categoriaPadre.getEmpresa());
-
-        categoriaPadre.agregarSubCategoria(subCategoria);
-
-        // Guardar el ID de la empresa de la categoría padre en el DTO
-        subCategoriaDTO.setIdEmpresaCategoriaPadre(idEmpresaCategoriaPadre);
-
-        return categoriaRepository.save(subCategoria);
+    // Verificar si la empresa de la categoría padre es nula
+    if (categoriaPadre.getEmpresa() == null) {
+        throw new IllegalArgumentException("La categoría padre no tiene una empresa asociada");
     }
+
+    // Verificar si ya existe una categoría con el mismo nombre (ignorando mayúsculas y minúsculas)
+    if (categoriaRepository.existsByDenominacionIgnoreCase(subCategoriaDTO.getDenominacion())) {
+        throw new IllegalArgumentException("Ya existe una categoría con el nombre proporcionado.");
+    }
+
+    // Obtener el ID de la empresa de la categoría padre
+    Long idEmpresaCategoriaPadre = categoriaPadre.getEmpresa().getId();
+
+    Categoria subCategoria = new Categoria();
+
+       if (subCategoriaDTO.getUrlIcono() != null) {
+           String rutaImagen = funcionalidades.guardarImagen(subCategoriaDTO.getUrlIcono(), UUID.randomUUID().toString() + ".jpg");
+           subCategoria.setUrlIcono(rutaImagen);
+       }
+
+    subCategoria.setDenominacion(subCategoriaDTO.getDenominacion());
+    subCategoria.setCategoriaPadre(categoriaPadre);
+
+    // Establecer la empresa de la categoría padre en la subcategoría
+    subCategoria.setEmpresa(categoriaPadre.getEmpresa());
+
+    categoriaPadre.agregarSubCategoria(subCategoria);
+
+    // Guardar el ID de la empresa de la categoría padre en el DTO
+    subCategoriaDTO.setIdEmpresaCategoriaPadre(idEmpresaCategoriaPadre);
+       categoriaRepository.save(subCategoria);
+       CategoriaDto dto = new CategoriaDto();
+         dto.setId(subCategoria.getId());
+            dto.setDenominacion(subCategoria.getDenominacion());
+            dto.setUrlIcono(subCategoria.getUrlIcono());
+
+
+
+    return dto;
+}
    //---------------------
 
 
@@ -581,5 +621,24 @@ public Set<CategoriaDto> traerTodo2(Long empresaId) throws Exception {
     }
 
 
+    public Set<CategoriaDto> traerCategoriasPadres() throws Exception {
+        try {
+            Set<Categoria> categoriasPadres = categoriaRepository.findByCategoriaPadreIsNullAndEliminadoFalse();
+            Set<CategoriaDto> categoriasPadresDto = new HashSet<>();
+            for (Categoria categoria : categoriasPadres) {
+                CategoriaDto categoriaDto = new CategoriaDto();
+                categoriaDto.setId(categoria.getId());
+                categoriaDto.setDenominacion(categoria.getDenominacion());
+                categoriaDto.setUrlIcono(categoria.getUrlIcono());
+                categoriaDto.setEliminado(categoria.isEliminado());
+                // Aquí puedes agregar más campos al DTO si es necesario
+
+                categoriasPadresDto.add(categoriaDto);
+            }
+            return categoriasPadresDto;
+        } catch (Exception e) {
+            throw new Exception("Error al obtener las categorías padres: " + e.getMessage(), e);
+        }
+    }
 
 }

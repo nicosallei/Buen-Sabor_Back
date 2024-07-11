@@ -11,6 +11,7 @@ import java.time.LocalDate;
 
 @Entity
 @Data
+//@Audited
 public class Empleado extends Base {
 
     private String nombre;

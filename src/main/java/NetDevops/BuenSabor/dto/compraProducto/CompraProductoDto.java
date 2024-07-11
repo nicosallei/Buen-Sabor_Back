@@ -14,6 +14,8 @@ public class CompraProductoDto extends BaseDto {
 
     private String denominacion;
     private String descripcion;
+    private Integer tiempoEstimadoMinutos;
+    private String preparacion;
     private String codigo;
     private Double precioVenta;
     private List<ImagenArticulo> imagenes;

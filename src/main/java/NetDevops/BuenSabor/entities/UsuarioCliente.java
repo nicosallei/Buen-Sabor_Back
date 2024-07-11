@@ -8,6 +8,7 @@ import javax.management.relation.Role;
 
 @Entity
 @Data
+//@Audited
 public class UsuarioCliente extends Base{
     @Column(unique = true)
     private String username;

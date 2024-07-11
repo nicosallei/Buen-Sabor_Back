@@ -7,6 +7,7 @@ import lombok.Data;
 
 @Entity
 @Data
+//@Audited
 public class PedidoDetalle extends Base{
     private Integer cantidad;
 

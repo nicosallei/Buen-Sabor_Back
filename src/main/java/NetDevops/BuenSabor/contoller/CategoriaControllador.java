@@ -2,8 +2,10 @@ package NetDevops.BuenSabor.contoller;
 
 
 import NetDevops.BuenSabor.dto.categoria.CategoriaEmpresaDTO;
+
 import NetDevops.BuenSabor.dto.categoria.SubCategoriaConEmpresaDTO;
 import NetDevops.BuenSabor.entities.Categoria;
+import NetDevops.BuenSabor.errores.ApiError;
 import NetDevops.BuenSabor.service.ICategoriaService;
 import NetDevops.BuenSabor.service.impl.CategoriaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 
@@ -63,7 +66,8 @@ public class CategoriaControllador {
         try {
             return ResponseEntity.ok().body(categoriaService.eliminar(id));
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, e.getMessage());
+            return new ResponseEntity<>(apiError, apiError.getStatus());
         }
     }
 
@@ -74,7 +78,8 @@ public class CategoriaControllador {
         try {
             return ResponseEntity.ok().body(categoriaService.agregarSubCategoria(id, categoria));
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, e.getMessage());
+            return new ResponseEntity<>(apiError, apiError.getStatus());
         }
     }
 
@@ -94,7 +99,8 @@ public ResponseEntity<?> agregarArticulo(@RequestParam("idCategoria") Long idCat
     try {
         return ResponseEntity.ok().body(categoriaService.agregarArticulo(idCategoria, idArticulo));
     } catch (Exception e) {
-        return ResponseEntity.badRequest().body(e.getMessage());
+        ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, e.getMessage());
+        return new ResponseEntity<>(apiError, apiError.getStatus());
     }
 }
 
@@ -104,7 +110,8 @@ public ResponseEntity<?> agregarArticulo(@RequestParam("idCategoria") Long idCat
         try {
             return ResponseEntity.ok().body(categoriaService.obtenerCategoriasConSubCategorias());
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, e.getMessage());
+            return new ResponseEntity<>(apiError, apiError.getStatus());
         }
     }
 
@@ -114,7 +121,8 @@ public ResponseEntity<?> agregarArticulo(@RequestParam("idCategoria") Long idCat
         try {
             return ResponseEntity.ok().body(categoriaService.eliminarArticuloDeSubCategoria(idSubCategoria, idArticulo));
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, e.getMessage());
+            return new ResponseEntity<>(apiError, apiError.getStatus());
         }
     }
     @PutMapping("/actualizar/subcategoria/{idSubCategoria}")
@@ -123,7 +131,8 @@ public ResponseEntity<?> agregarArticulo(@RequestParam("idCategoria") Long idCat
         try {
             return ResponseEntity.ok().body(categoriaService.actualizarSubCategoria(idSubCategoria, nuevaSubCategoria));
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, e.getMessage());
+            return new ResponseEntity<>(apiError, apiError.getStatus());
         }
     }
 
@@ -133,7 +142,8 @@ public ResponseEntity<?> eliminarSubCategoria(@RequestParam("idCategoria") Long 
     try {
         return ResponseEntity.ok().body(categoriaService.eliminarSubCategoria(idCategoria, idSubCategoria));
     } catch (Exception e) {
-        return ResponseEntity.badRequest().body(e.getMessage());
+        ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, e.getMessage());
+        return new ResponseEntity<>(apiError, apiError.getStatus());
     }
 }
 
@@ -144,7 +154,8 @@ public ResponseEntity<?> eliminarSubCategoria(@RequestParam("idCategoria") Long 
             categoriaService.reactivate(id);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, e.getMessage());
+            return new ResponseEntity<>(apiError, apiError.getStatus());
         }
     }
     @GetMapping("/traer-todo/")
@@ -152,7 +163,8 @@ public ResponseEntity<?> eliminarSubCategoria(@RequestParam("idCategoria") Long 
         try {
             return ResponseEntity.ok(categoriaService.traerTodo());
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, e.getMessage());
+            return new ResponseEntity<>(apiError, apiError.getStatus());
         }
     }
     //obtiene todas las subcategorias
@@ -161,7 +173,8 @@ public ResponseEntity<?> eliminarSubCategoria(@RequestParam("idCategoria") Long 
         try {
             return ResponseEntity.ok().body(categoriaService.obtenerSubCategorias(id));
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, e.getMessage());
+            return new ResponseEntity<>(apiError, apiError.getStatus());
         }
     }
    @GetMapping("/categoriasPadre/{sucursalId}")
@@ -169,7 +182,8 @@ public ResponseEntity<?> obtenerCategoriasPadre(@PathVariable Long sucursalId) {
     try {
         return ResponseEntity.ok().body(categoriaService.traerCategoriaPadre(sucursalId));
     } catch (Exception e) {
-        return ResponseEntity.badRequest().body(e.getMessage());
+        ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, e.getMessage());
+        return new ResponseEntity<>(apiError, apiError.getStatus());
     }
 }
 
@@ -179,7 +193,8 @@ public ResponseEntity<?> obtenerCategoriasPadre(@PathVariable Long sucursalId) {
             boolean tieneSubCategorias = categoriaService.tieneSubCategorias(id);
             return ResponseEntity.ok().body(tieneSubCategorias);
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, e.getMessage());
+            return new ResponseEntity<>(apiError, apiError.getStatus());
         }
     }
 
@@ -191,17 +206,31 @@ public ResponseEntity<?> obtenerCategoriasPadre(@PathVariable Long sucursalId) {
 
     @PostMapping("/porEmpresa")
 
-    public ResponseEntity<Categoria> crearCategoriaporEmpresa(@RequestBody CategoriaEmpresaDTO categoriaDTO) {
-        Categoria nuevaCategoria = catService.crearCategoriaporEmpresa(categoriaDTO);
-        return ResponseEntity.ok(nuevaCategoria);
+    public ResponseEntity<?> crearCategoriaporEmpresa(@RequestBody CategoriaEmpresaDTO categoriaDTO) throws Exception {
+        try {
+            Categoria nuevaCategoria = catService.crearCategoriaporEmpresa(categoriaDTO);
+            return ResponseEntity.ok(nuevaCategoria);
+
+        } catch (Exception e) {
+            ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, e.getMessage());
+            return new ResponseEntity<>(apiError, apiError.getStatus());
+
+        }
     }
 
     @PutMapping("/{id}/denominacion")
 
-    public ResponseEntity<Categoria> actualizarDenominacion(@PathVariable Long id, @RequestBody String nuevaDenominacion) {
-        Categoria categoriaActualizada = catService.actualizarDenominacion(id, nuevaDenominacion);
-        return ResponseEntity.ok(categoriaActualizada);
+    public ResponseEntity<?> actualizarDenominacion(@PathVariable Long id, @RequestBody String nuevaDenominacion) throws Exception {
+        try {
+            Categoria categoriaActualizada = catService.actualizarDenominacion(id, nuevaDenominacion);
+            return ResponseEntity.ok(categoriaActualizada);
+
+        } catch (Exception e) {
+            ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, e.getMessage());
+            return new ResponseEntity<>(apiError, apiError.getStatus());
+        }
     }
+
     @PutMapping("/{id}/eliminado")
 
     public ResponseEntity<Categoria> cambiarEstadoEliminado(@PathVariable Long id) {
@@ -212,9 +241,9 @@ public ResponseEntity<?> obtenerCategoriasPadre(@PathVariable Long sucursalId) {
 
     @PostMapping("/subcategoriaConEmpresa")
 
-    public ResponseEntity<Categoria> crearSubCategoriaConEmpresa(@RequestBody SubCategoriaConEmpresaDTO subCategoriaDTO) {
-        Categoria nuevaSubCategoria = catService.crearSubCategoriaConEmpresa(subCategoriaDTO);
-        return ResponseEntity.ok(nuevaSubCategoria);
+    public ResponseEntity<?> crearSubCategoriaConEmpresa(@RequestBody SubCategoriaConEmpresaDTO subCategoriaDTO) throws IOException {
+
+        return ResponseEntity.ok(catService.crearSubCategoriaConEmpresa(subCategoriaDTO));
     }
 
     //------------------
@@ -223,7 +252,17 @@ public ResponseEntity<?> obtenerCategoriasPadre(@PathVariable Long sucursalId) {
         try {
             return ResponseEntity.ok(catService.traerTodo2(idEmpresa));
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, e.getMessage());
+            return new ResponseEntity<>(apiError, apiError.getStatus());
+        }
+    }
+    @GetMapping("/traer-categoria-padre")
+    public ResponseEntity<?> traerCategoriaPadre() {
+        try {
+            return ResponseEntity.ok(catService.traerCategoriasPadres());
+        } catch (Exception e) {
+            ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, e.getMessage());
+            return new ResponseEntity<>(apiError, apiError.getStatus());
         }
     }
 

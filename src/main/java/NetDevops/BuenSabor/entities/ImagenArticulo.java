@@ -12,6 +12,7 @@ import lombok.*;
 @Setter
 @Getter
 @ToString
+//@Audited
 public class ImagenArticulo extends Base{
 
     private String url;

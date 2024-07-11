@@ -1,6 +1,7 @@
 package NetDevops.BuenSabor.contoller;
 
 import NetDevops.BuenSabor.entities.ArticuloInsumo;
+import NetDevops.BuenSabor.errores.ApiError;
 import NetDevops.BuenSabor.service.IArticuloInsumoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -45,7 +46,8 @@ public class ArticuloInsumoController {
 
             return ResponseEntity.ok(articuloInsumoService.buscarPorId(insumo.getId()));
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, e.getMessage());
+            return new ResponseEntity<>(apiError, apiError.getStatus());
         }
     }
 
@@ -55,7 +57,8 @@ public class ArticuloInsumoController {
         try {
             return ResponseEntity.ok(articuloInsumoService.actualizar(id, articuloInsumo));
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, e.getMessage());
+            return new ResponseEntity<>(apiError, apiError.getStatus());
         }
     }
     @DeleteMapping("/{id}")

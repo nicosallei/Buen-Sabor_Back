@@ -8,6 +8,7 @@ import java.util.Set;
 
 @Entity
 @Data
+//@Audited
 public class Empresa extends Base{
 private String nombre;
 private String razonSocial;

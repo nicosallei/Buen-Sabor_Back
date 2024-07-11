@@ -65,9 +65,9 @@ public class SucursalController {
 
     @PutMapping("/{id}")
     @PreAuthorize(" hasAuthority('ADMINISTRADOR')")
-    public ResponseEntity<?> actualizar(@PathVariable Long id,@RequestBody Sucursal sucursal){
+    public ResponseEntity<?> actualizar(@PathVariable Long id,@RequestBody SucursalDto sucursalDto){
         try {
-            return ResponseEntity.ok(sucursalService.update(id, sucursal));
+            return ResponseEntity.ok(sucursalService.updateDto(id, sucursalDto));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
@@ -76,6 +76,14 @@ public class SucursalController {
     public ResponseEntity<?> traerPorEmpresaId(@PathVariable Long empresaId){
         try {
             return ResponseEntity.ok(sucursalService.traerPorEmpresaId(empresaId));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+    @GetMapping("/lista-todo-sucursal/{empresaId}")
+    public ResponseEntity<?> traerTodoPorEmpresaId(@PathVariable Long empresaId){
+        try {
+            return ResponseEntity.ok(sucursalService.traerTodoPorEmpresaId(empresaId));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

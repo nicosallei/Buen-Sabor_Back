@@ -1,8 +1,10 @@
 package NetDevops.BuenSabor.contoller;
 
 import NetDevops.BuenSabor.entities.ArticuloManufacturado;
+import NetDevops.BuenSabor.errores.ApiError;
 import NetDevops.BuenSabor.service.IArticuloManufacturadoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -42,7 +44,8 @@ public class ArticuloManufacturadoController {
         try {
             return ResponseEntity.ok().body(articuloManufacturadoService.cargarArticuloManufacturado(articuloManufacturado));
         }catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, e.getMessage());
+            return new ResponseEntity<>(apiError, apiError.getStatus());
         }
     }
     @PutMapping("/{id}")
@@ -51,7 +54,8 @@ public class ArticuloManufacturadoController {
         try {
             return ResponseEntity.status(200).body(articuloManufacturadoService.actualizarArticuloManufacturado(id, articuloManufacturado));
         }catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, e.getMessage());
+            return new ResponseEntity<>(apiError, apiError.getStatus());
         }
     }
     @DeleteMapping("/{id}")
