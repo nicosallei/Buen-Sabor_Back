@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 // GET http://localhost:8080/api/localidad/
 
 @RestController
@@ -15,6 +17,11 @@ public class LocalidadController {
 private ILocalidadService localidadService;
 
 //region CRUD Basico
+
+    @GetMapping("/provincia/{provinciaId}")
+    public List<Localidad> getLocalidadesByProvincia(@PathVariable Long provinciaId) {
+        return localidadService.getLocalidadesByProvinciaId(provinciaId);
+    }
 
     @GetMapping("/traer-todo/")
     public ResponseEntity<?> mostrarLista(){

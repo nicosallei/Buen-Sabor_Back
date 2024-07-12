@@ -1,6 +1,7 @@
 package NetDevops.BuenSabor.entities;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -12,6 +13,8 @@ import lombok.experimental.SuperBuilder;
 @ToString
 @SuperBuilder
 //@Audited
-public class Pais extends Base{
+public class Pais {
+    @Id
+    private Long id;
     private String nombre;
 }
