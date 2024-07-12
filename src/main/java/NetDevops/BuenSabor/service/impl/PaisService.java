@@ -18,7 +18,7 @@ public class PaisService implements IPaisService {
     public Boolean eliminar(Long id) throws Exception {
         try {
             Pais pais = paisRepository.findById(id).get();
-            pais.setEliminado(true);
+            //pais.setEliminado(true);
             return true;
         } catch (Exception e) {
             throw new Exception(e.getMessage());
@@ -68,7 +68,7 @@ public class PaisService implements IPaisService {
     public Boolean reactivar(Long id) throws Exception {
         try {
             Pais pais = paisRepository.findById(id).get();
-            pais.setEliminado(false);
+           // pais.setEliminado(false);
             return true;
         } catch (Exception e) {
             throw new Exception(e.getMessage());

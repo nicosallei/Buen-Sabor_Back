@@ -11,4 +11,5 @@ public interface ILocalidadService {
     public Localidad buscarPorId(Long id) throws Exception;
     public List<Localidad> buscarTodos() throws Exception;
     public Boolean reactivar(Long id) throws Exception;
+    public List<Localidad> getLocalidadesByProvinciaId(Long provinciaId);
 }
