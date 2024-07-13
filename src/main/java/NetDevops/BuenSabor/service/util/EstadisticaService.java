@@ -1,6 +1,9 @@
 package NetDevops.BuenSabor.service.util;
 
 
+import NetDevops.BuenSabor.dto.articuloInsumo.InsumoStockDto;
+import NetDevops.BuenSabor.dto.articuloManufacturado.ArticuloManufacturadoVendidoDto;
+import NetDevops.BuenSabor.repository.IAriticuloInsumoRepository;
 import NetDevops.BuenSabor.repository.IPedidoDetalleReposiroty;
 import NetDevops.BuenSabor.repository.IPedidoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +14,7 @@ import java.time.YearMonth;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -20,6 +24,8 @@ public class EstadisticaService {
     private IPedidoRepository pedidoRepository;
     @Autowired
     private IPedidoDetalleReposiroty pedidoDetalleRepository;
+    @Autowired
+    private IAriticuloInsumoRepository articuloInsumoRepository;
 
     public Map<LocalDate, Double> getIngresosPorRangoDeDias(LocalDate startDate, LocalDate endDate, Long sucursalId) {
         List<Object[]> results = pedidoRepository.sumTotalesPedidosPorRangoDeDias(startDate, endDate, sucursalId);
@@ -47,5 +53,17 @@ public class EstadisticaService {
     }
     return ingresosPorMes;
 }
+
+    public List<InsumoStockDto> obtenerInsumosConStockPorSucursal(Long sucursalId) {
+        return articuloInsumoRepository.findInsumosConStockPorSucursal(sucursalId).stream()
+                .map(insumo -> new InsumoStockDto(insumo.getDenominacion(), insumo.getStockActual()))
+                .collect(Collectors.toList());
+    }
+
+    public List<ArticuloManufacturadoVendidoDto> obtenerArticulosManufacturadosVendidosPorSucursal(Long sucursalId) {
+        return pedidoDetalleRepository.findArticulosManufacturadosVendidosPorSucursal(sucursalId);
+    }
+
+
 
 }

@@ -2,6 +2,7 @@ package NetDevops.BuenSabor.repository;
 
 import NetDevops.BuenSabor.entities.ArticuloInsumo;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -32,5 +33,6 @@ public interface IAriticuloInsumoRepository extends JpaRepository<ArticuloInsumo
 boolean existsByDenominacionAndSucursal_Id(String denominacion, Long sucursalId);
 
     List<ArticuloInsumo> findByCategoriaIdAndEliminadoFalse(Long categoriaId);
-
+    @Query("SELECT ai FROM ArticuloInsumo ai WHERE ai.stockActual > 0 AND ai.sucursal.id = :sucursalId")
+    List<ArticuloInsumo> findInsumosConStockPorSucursal(Long sucursalId);
 }

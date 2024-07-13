@@ -1,13 +1,17 @@
 package NetDevops.BuenSabor.contoller;
 
+import NetDevops.BuenSabor.dto.articuloInsumo.InsumoStockDto;
+import NetDevops.BuenSabor.dto.articuloManufacturado.ArticuloManufacturadoVendidoDto;
 import NetDevops.BuenSabor.service.util.EstadisticaService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -30,4 +34,20 @@ public class EstadisticasController {
                                                              @RequestParam Long sucursalId) {
         return estadisticaService.getIngresosPorRangoDeMeses(startMonth, endMonth, sucursalId);
     }
+
+
+    @GetMapping("/insumosConStock/{sucursalId}")
+    public ResponseEntity<List<InsumoStockDto>> obtenerInsumosConStockPorSucursal(@PathVariable Long sucursalId) {
+        List<InsumoStockDto> insumos = estadisticaService.obtenerInsumosConStockPorSucursal(sucursalId);
+        return ResponseEntity.ok(insumos);
+    }
+
+    @GetMapping("/articulosManufacturadosVendidos/{sucursalId}")
+    public ResponseEntity<List<ArticuloManufacturadoVendidoDto>> obtenerArticulosManufacturadosVendidosPorSucursal(@PathVariable Long sucursalId) {
+        List<ArticuloManufacturadoVendidoDto> articulos = estadisticaService.obtenerArticulosManufacturadosVendidosPorSucursal(sucursalId);
+        return ResponseEntity.ok(articulos);
+    }
+
+
+
 }
