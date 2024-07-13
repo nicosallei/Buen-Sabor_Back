@@ -352,12 +352,12 @@ public Set<CategoriaDto> traerTodo() throws Exception {
         }
     }
 
-  @Override
+@Override
 public Set<CategoriaDto> traerCategoriaPadre(Long sucursalId) throws Exception {
     try {
-        Set<Categoria> listaCategoriaOriginal = categoriaRepository.findBySucursales_IdAndEliminadoFalse(sucursalId);
+        Set<Categoria> listaCategoriaOriginal = categoriaRepository.findBySucursales_IdAndEliminadoFalseAndCategoriaPadreIsNull(sucursalId);
         Set<CategoriaDto> listaDto = new HashSet<>();
-        for (Categoria lista: listaCategoriaOriginal){
+        for (Categoria lista : listaCategoriaOriginal) {
             CategoriaDto categoriadto = new CategoriaDto();
             categoriadto.setDenominacion(lista.getDenominacion());
             categoriadto.setUrlIcono(lista.getUrlIcono());
@@ -367,7 +367,6 @@ public Set<CategoriaDto> traerCategoriaPadre(Long sucursalId) throws Exception {
             listaDto.add(categoriadto);
         }
         return listaDto;
-
     } catch (Exception e) {
         throw new Exception(e);
     }

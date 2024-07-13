@@ -48,5 +48,5 @@ Set<Categoria> findBySucursalesNotContainsAndEmpresa(Sucursal sucursal, Empresa 
     Set<Categoria> findByCategoriaPadre_IdAndSucursalesNotContainsAndEmpresa(Long categoriaPadreId, Sucursal sucursal, Empresa empresa);
     Set<Categoria> findByCategoriaPadreIsNullAndEliminadoFalse();
 
-
+Set<Categoria> findBySucursales_IdAndEliminadoFalseAndCategoriaPadreIsNull(Long sucursalId);
 }
