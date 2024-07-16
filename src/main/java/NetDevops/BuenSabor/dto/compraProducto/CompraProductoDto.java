@@ -25,6 +25,7 @@ public class CompraProductoDto extends BaseDto {
     //private UnidadMedida unidadMedida;
     private Long categoriaId;
     private Long sucursalId;
+    private Long cantidadMaximaCompra;
 
 
 }
