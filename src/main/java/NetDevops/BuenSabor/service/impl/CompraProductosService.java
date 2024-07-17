@@ -59,20 +59,7 @@ public class CompraProductosService {
         List<ArticuloManufacturado> articulosManufacturados = articuloManufacturadoRepository.findByCategoriaIdAndEliminadoFalse(subcategoria.getId());
         List<ArticuloInsumo> articulosInsumos = articuloInsumoRepository.findByCategoriaIdAndEliminadoFalse(subcategoria.getId());
 
-        for (ArticuloManufacturado articulo : articulosManufacturados) {
-            boolean canBeCreated = true;
-            for (ArticuloManufacturadoDetalle detalle : articulo.getArticuloManufacturadoDetalles()) {
-                ArticuloInsumo insumo = detalle.getArticuloInsumo();
-                if (insumo.getStockActual() < detalle.getCantidad()) {
-                    canBeCreated = false;
-                    break;
-                }
-            }
-            if (canBeCreated) {
-                CompraProductoDto dto = convertToDto(articulo);
-                articulos.add(dto);
-            }
-        }
+
 
         for (ArticuloInsumo articulo : articulosInsumos) {
             CompraProductoDto dto = convertToDto(articulo);
@@ -91,20 +78,8 @@ private CompraProductoDto convertToDto(Articulo articulo) {
     dto.setDescripcion(articulo.getDescripcion());
     dto.setCodigo(articulo.getCodigo());
     dto.setPrecioVenta(articulo.getPrecioVenta());
-if(producto != null){
-    dto.setPreparacion(producto.getPreparacion());
-    dto.setTiempoEstimadoMinutos(producto.getTiempoEstimadoMinutos());
-}
 
 
-    List<ImagenArticulo> processedImages = new ArrayList<>();
-    for (ImagenArticulo imagen : articulo.getImagenes()) {
-        String imagePath = imagen.getUrl();
-        imagePath = imagePath.replace("src\\main\\resources\\images\\", "");
-        imagen.setUrl(imagePath);
-        processedImages.add(imagen);
-    }
-    dto.setImagenes(processedImages); // Convert Set to List
 
     dto.setCategoriaId(articulo.getCategoria().getId());
     if (articulo.getSucursal() != null) {
@@ -141,10 +116,6 @@ if(producto != null){
         // Set other properties...
         pedido.setFechaPedido(LocalDate.now());
         pedido.setHora(LocalTime.now());
-        pedido.setTotal(compraPedidoDto.getTotal());
-        pedido.setDomicilio(compraPedidoDto.getDomicilio());
-        pedido.setTipoEnvio(compraPedidoDto.getTipoEnvio());
-        pedido.setFormaPago(compraPedidoDto.getFormaPago());
         pedido.setCliente(clienteRepository.findById(compraPedidoDto.getCliente().getId())
                 .orElseThrow(() -> new NoSuchElementException("Cliente no encontrado con id: " + compraPedidoDto.getCliente().getId())));
 
@@ -153,22 +124,6 @@ if(producto != null){
             Articulo articulo = articuloRepository.findById(detalleDto.getProducto().getId())
                     .orElseThrow(() -> new NoSuchElementException("Articulo no encontrado con id: " + detalleDto.getProducto().getId()));
 
-            if (articulo instanceof ArticuloInsumo) {
-                ArticuloInsumo articuloInsumo = (ArticuloInsumo) articulo;
-                // Subtract the quantity from the stock of the ArticuloInsumo
-                articuloInsumo.setStockActual(articuloInsumo.getStockActual() - detalleDto.getCantidad());
-                // Save the updated ArticuloInsumo in the database
-                articuloRepository.save(articuloInsumo);
-            } else if (articulo instanceof ArticuloManufacturado) {
-                ArticuloManufacturado articuloManufacturado = (ArticuloManufacturado) articulo;
-                for (ArticuloManufacturadoDetalle detalle : articuloManufacturado.getArticuloManufacturadoDetalles()) {
-                    ArticuloInsumo articuloInsumo = detalle.getArticuloInsumo();
-                    // Subtract the quantity needed for the manufacturing from the stock of the ArticuloInsumo
-                    articuloInsumo.setStockActual(articuloInsumo.getStockActual() - detalle.getCantidad());
-                    // Save the updated ArticuloInsumo in the database
-                    articuloRepository.save(articuloInsumo);
-                }
-            }
 
             PedidoDetalle detalle = new PedidoDetalle();
             detalle.setArticulo(articulo);
