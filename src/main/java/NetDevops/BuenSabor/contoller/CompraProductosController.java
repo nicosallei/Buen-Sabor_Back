@@ -2,10 +2,8 @@ package NetDevops.BuenSabor.contoller;
 
 import NetDevops.BuenSabor.dto.compraProducto.CompraPedidoDto;
 import NetDevops.BuenSabor.entities.Pedido;
-import NetDevops.BuenSabor.errores.ApiError;
 import NetDevops.BuenSabor.service.impl.CompraProductosService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -50,8 +48,7 @@ public class CompraProductosController {
             CompraPedidoDto pedido = compraProductosService.crearPedido(compraPedidoDto);
             return ResponseEntity.ok().body(pedido);
         } catch (Exception e) {
-            ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, e.getMessage());
-            return new ResponseEntity<>(apiError, apiError.getStatus());
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 

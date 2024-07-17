@@ -85,7 +85,7 @@ public class EmpleadoController {
         if (empleado != null) {
             return ResponseEntity.ok(empleado);
         } else {
-            return null;
+            return ResponseEntity.notFound().build();
         }
     }
 }

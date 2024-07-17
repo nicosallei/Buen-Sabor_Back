@@ -1,7 +1,6 @@
 package NetDevops.BuenSabor.contoller;
 
 import NetDevops.BuenSabor.entities.Cliente;
-import NetDevops.BuenSabor.entities.Empleado;
 import NetDevops.BuenSabor.service.impl.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -56,16 +55,6 @@ public class ClienteController {
             return ResponseEntity.ok().body(clienteService.eliminarCliente(id));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
-        }
-    }
-
-    @GetMapping("/email/{email}")
-    public ResponseEntity<?> getEmpleadoByEmail(@PathVariable String email) {
-        Cliente cliente = clienteService.buscarPorEmail(email);
-        if (cliente != null) {
-            return ResponseEntity.ok(cliente);
-        } else {
-            return ResponseEntity.notFound().build();
         }
     }
 

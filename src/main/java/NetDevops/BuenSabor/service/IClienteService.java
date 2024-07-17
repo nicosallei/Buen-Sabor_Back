@@ -9,6 +9,5 @@ public interface IClienteService {
     public Cliente actualizarCliente(Long idCliente,Cliente cliente) throws Exception;
     public boolean eliminarCliente(Long idCliente) throws Exception;
     public List<Cliente> TraerClientes() throws Exception;
-    public Cliente buscarPorEmail(String email) throws Exception;
 
 }
