@@ -36,15 +36,6 @@ public class LocalController {
         }
     }
 
-    @GetMapping("/traerTodoCategoria/{sucursalId}")
-    public ResponseEntity<?> traerTodoCategoria(@PathVariable Long sucursalId){
-        try {
-            return ResponseEntity.ok(localService.traerTodo(sucursalId));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-    }
-
     @GetMapping("/traerTodo/{sucursalId}")
     public ResponseEntity<?> traerTodo(@PathVariable Long sucursalId){
         try {
