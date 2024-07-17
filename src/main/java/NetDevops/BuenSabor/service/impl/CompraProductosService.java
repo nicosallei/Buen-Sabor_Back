@@ -81,22 +81,17 @@ public class CompraProductosService {
 }
 
 private CompraProductoDto convertToDto(Articulo articulo) {
-    ArticuloManufacturado producto = articuloManufacturadoRepository.findById(articulo.getId()).orElse(null);
+      ArticuloManufacturado producto = articuloManufacturadoRepository.findById(articulo.getId()).orElse(null);
     CompraProductoDto dto = new CompraProductoDto();
     dto.setId(articulo.getId());
     dto.setDenominacion(articulo.getDenominacion());
     dto.setDescripcion(articulo.getDescripcion());
     dto.setCodigo(articulo.getCodigo());
     dto.setPrecioVenta(articulo.getPrecioVenta());
-    if(producto != null){
-        dto.setPreparacion(producto.getPreparacion());
-        dto.setTiempoEstimadoMinutos(producto.getTiempoEstimadoMinutos());
-        // Calcular la cantidad máxima de compra basada en el stock de insumos
-        Long cantidadMaximaCompra = Long.valueOf(producto.getArticuloManufacturadoDetalles().stream()
-                .map(detalle -> detalle.getArticuloInsumo().getStockActual() / detalle.getCantidad())
-                .min(Long::compare).orElse(0));
-        dto.setCantidadMaximaCompra(cantidadMaximaCompra);
-    }
+if(producto != null){
+    dto.setPreparacion(producto.getPreparacion());
+    dto.setTiempoEstimadoMinutos(producto.getTiempoEstimadoMinutos());
+}
 
 
     List<ImagenArticulo> processedImages = new ArrayList<>();
