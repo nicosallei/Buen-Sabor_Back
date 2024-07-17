@@ -26,7 +26,7 @@ public class MercadoPagoController {
             Pedido pedidoActualizado = pedidoService.buscarPorId(pedido.getId());
             PreferenceMP preferenceMP = mercadoPagoService.getPreferenciaIdMercadoPago(pedidoActualizado);
             pedidoActualizado.setPreferenceMPId(preferenceMP.getId());
-            pedidoService.actualizarPedido(pedido.getId(), pedidoActualizado);
+
             return preferenceMP;
         } catch (Exception e) {
             e.printStackTrace();
