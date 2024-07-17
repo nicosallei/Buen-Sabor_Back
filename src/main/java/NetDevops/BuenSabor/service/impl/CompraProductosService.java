@@ -12,10 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class CompraProductosService {
@@ -142,6 +139,33 @@ private CompraProductoDto convertToDto(Articulo articulo) {
 
     public CompraPedidoDto crearPedido(CompraPedidoDto compraPedidoDto) throws Exception {
     try {
+
+        Map<Long, Integer> insumosNecesarios = new HashMap<>();
+
+        // Calcular la cantidad total necesaria de cada insumo
+        for (PedidoDetalleDto detalleDto : compraPedidoDto.getPedidoDetalle()) {
+            Articulo articulo = articuloRepository.findById(detalleDto.getProducto().getId())
+                    .orElseThrow(() -> new NoSuchElementException("Articulo no encontrado con id: " + detalleDto.getProducto().getId()));
+
+            if (articulo instanceof ArticuloInsumo) {
+                insumosNecesarios.merge(articulo.getId(), detalleDto.getCantidad(), Integer::sum);
+            } else if (articulo instanceof ArticuloManufacturado) {
+                for (ArticuloManufacturadoDetalle detalle : ((ArticuloManufacturado) articulo).getArticuloManufacturadoDetalles()) {
+                    insumosNecesarios.merge(detalle.getArticuloInsumo().getId(), detalle.getCantidad() * detalleDto.getCantidad(), Integer::sum);
+                }
+            }
+        }
+
+        // Verificar que hay suficiente stock para cada insumo
+        for (Map.Entry<Long, Integer> entry : insumosNecesarios.entrySet()) {
+            ArticuloInsumo insumo = articuloInsumoRepository.findById(entry.getKey())
+                    .orElseThrow(() -> new NoSuchElementException("Insumo no encontrado con id: " + entry.getKey()));
+            if (insumo.getStockActual() < entry.getValue()) {
+                throw new Exception("Stock insuficiente para el insumo: " + insumo.getDenominacion());
+            }
+        }
+
+
         Pedido pedido = new Pedido();
         // Set other properties...
         pedido.setFechaPedido(LocalDate.now());

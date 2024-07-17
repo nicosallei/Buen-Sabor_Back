@@ -1,6 +1,7 @@
 package NetDevops.BuenSabor.service.impl;
 
 import NetDevops.BuenSabor.entities.Cliente;
+import NetDevops.BuenSabor.entities.Empleado;
 import NetDevops.BuenSabor.repository.IClienteRepository;
 import NetDevops.BuenSabor.service.IClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,5 +65,9 @@ public class ClienteService implements IClienteService {
         } catch (Exception e) {
             throw new Exception(e.getMessage());
         }
+    }
+    @Override
+    public Cliente buscarPorEmail(String email) {
+        return clienteRepository.findByEmail(email);
     }
 }
